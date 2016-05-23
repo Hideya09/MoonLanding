@@ -8,7 +8,7 @@ public struct sPlayerInformation{
 	public float m_MoveY;
 }
 
-public class cPlayerModel{
+public class cPlayerModel : ScriptableObject{
 
 	//角度の加算値(秒速)
 	private const float AddAngle = 60.0f;
@@ -22,12 +22,22 @@ public class cPlayerModel{
 
 	private bool m_MoveFlag;
 
+	private bool m_Clearflag;
+
+	public cPlayerModel(){
+		m_Information.m_PlayerPosition.x = 0.0f;
+		m_Information.m_PlayerPosition.y = -50.0f;
+		m_Information.m_PlayerPosition.z = 0.0f;
+	}
+
 	public void PlayerInfoSet( sPlayerInformation setInformation ){
 		m_Information = setInformation;
 
 		m_Fuel = FuelMax;
 
-		m_MoveFlag = true;
+		m_MoveFlag = false;
+
+		m_Clearflag = false;
 	}
 
 	public void AddLeftAngle(){
@@ -76,6 +86,13 @@ public class cPlayerModel{
 		m_Fuel -= Time.deltaTime;
 	}
 
+	public bool GetMoveFlag(){
+		return m_MoveFlag;
+	}
+	public bool GetClearFlag(){
+		return m_Clearflag;
+	}
+
 	public Vector3 GetPosition(){
 		return m_Information.m_PlayerPosition;
 	}
@@ -103,6 +120,7 @@ public class cPlayerModel{
 	public void HitCheck( Collider2D collider ){
 		if (collider.name == "StageGoal1") {
 			if (GetSpeed () < 3.0f && Mathf.Abs (m_Information.m_Angle) < 5) {
+				m_Clearflag = true;
 				Debug.Log ("ゴールに当たった");
 			} else {
 				Debug.Log ("それ以外");
@@ -112,5 +130,9 @@ public class cPlayerModel{
 		}
 
 		m_MoveFlag = false;
+	}
+
+	public void SetMoveFlag(){
+		m_MoveFlag = true;
 	}
 }

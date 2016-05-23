@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class cPlayerView : MonoBehaviour {
 
-	private cPlayerModel m_Model;
+	public cPlayerModel m_Model;
 
 	public Text m_uiSpeed;
 
@@ -23,17 +23,5 @@ public class cPlayerView : MonoBehaviour {
 		m_uiSpeed.text = "Speed " + m_Model.GetSpeed ().ToString ( "f1" ) + "/ms";
 
 		m_uiGauge.localScale = new Vector3 (m_Model.GetFuelPercent () , 1.0f , 1.0f);
-	}
-
-	public void SetModel( cPlayerModel setModel ){
-		m_Model = setModel;
-	}
-
-	void OnCollisionEnter2D( Collision2D collision ){
-		m_Model.HitCheck (collision);
-	}
-
-	void OnTriggerEnter2D( Collider2D other ){
-		m_Model.HitCheck (other);
 	}
 }

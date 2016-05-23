@@ -1,16 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class cPlayerControl {
+public class cPlayerControl : MonoBehaviour{
 
-	private cPlayerModel m_Model;
-	private cPlayerView m_View;
+	public cPlayerModel m_Model;
 
-	public cPlayerControl( cPlayerModel setModel , cPlayerView setView ){
-		m_Model = setModel;
-		m_View = setView;
-
-		m_View.SetModel (m_Model);
+	void Update(){
+		RotateKey ();
+		PropulsionKey ();
+		HorizontalKey ();
 	}
 
 	public void RotateKey(){
@@ -33,5 +31,13 @@ public class cPlayerControl {
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			m_Model.HorizontalAngle();
 		}
+	}
+
+	void OnCollisionEnter2D( Collision2D collision ){
+		m_Model.HitCheck (collision);
+	}
+
+	void OnTriggerEnter2D( Collider2D other ){
+		m_Model.HitCheck (other);
 	}
 }

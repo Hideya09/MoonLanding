@@ -24,6 +24,5 @@ public class cStageView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		//Graphics.DrawMesh (mesh, Vector3.zero, Quaternion.identity, material, 0);
 	}
 }

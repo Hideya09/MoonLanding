@@ -3,10 +3,30 @@ using System.Collections;
 
 public class cGameSceneManager : MonoBehaviour {
 
-	cGameMain m_GameMain;
+	public enum eGameScene{
+		GameScene_Title,
+		GameScene_Game,
+		GameScene_Result
+	}
+
+	private static GameObject m_SceneManager;
+
+	public eGameScene m_GameScene;
+
+	public cMain[] m_Scene;
 
 	void Awake(){
-		m_GameMain = new cGameMain ();
+		if (m_SceneManager == null) {
+			DontDestroyOnLoad (gameObject);
+
+			m_SceneManager = gameObject;
+		} else {
+			Destroy (this);
+			return;
+		}
+
+		//フレームレート設定
+		Application.targetFrameRate = 60;
 	}
 
 	// Use this for initialization
@@ -15,6 +35,11 @@ public class cGameSceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		m_GameMain.GameManage ();
+		eGameScene nextScene = m_Scene [(int)m_GameScene].State ();
+
+		if (nextScene != m_GameScene) {
+			UnityEngine.SceneManagement.SceneManager.LoadScene ((int)nextScene);
+			m_GameScene = nextScene;
+		}
 	}
 }
