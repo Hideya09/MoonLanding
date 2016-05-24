@@ -20,10 +20,10 @@ public class cGameTextView : MonoBehaviour {
 	void Update () {
 		sTextInformation info = m_gtModel.GetInfo ();
 		m_Transform.localScale = new Vector3 (info.m_Size, info.m_Size, 1.0f);
-		m_Text.color = new Color (0.0f, 0.0f, 0.0f, info.m_Arpha);
+		m_Text.color = new Color (1.0f, 1.0f, 1.0f, info.m_Arpha);
 		m_Text.text = info.m_Text;
 
-		if (info.m_State == 1) {
+		if (info.m_State == 2) {
 			m_Particle.Play ();
 		} else {
 			m_Particle.Stop ();

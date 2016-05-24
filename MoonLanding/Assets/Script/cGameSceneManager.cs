@@ -26,7 +26,8 @@ public class cGameSceneManager : MonoBehaviour {
 		}
 
 		//フレームレート設定
-		Application.targetFrameRate = 60;
+		//Application.targetFrameRate = 60;
+		QualitySettings.vSyncCount = 60;
 	}
 
 	// Use this for initialization

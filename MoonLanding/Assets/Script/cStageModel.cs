@@ -22,10 +22,12 @@ public class cStageModel : ScriptableObject{
 	private List< Vector2 > m_StagePosition;
 
 	GameObject m_Stage;
-	GameObject m_Enemy;
+	List< GameObject > m_Enemy;
 
 	public void OnEnable(){
 		m_StageNumber = 0;
+
+		m_Enemy = new List< GameObject > ();
 
 		m_StagePosition = new List<Vector2> ();
 	}
@@ -61,15 +63,52 @@ public class cStageModel : ScriptableObject{
 		m_playerInformation.m_MoveX = float.Parse (playerData [3]);
 		m_playerInformation.m_MoveY = float.Parse (playerData [4]);
 
-		int vertexMax = int.Parse (playerData [5]);
+		//reader.Close ();
+
+		//string filename = "CSV/Enemy" + m_StageNumber.ToString ();
+
+		//TextAsset enemyFile = (TextAsset)Resources.Load (filename);
+
+		//StringReader enemyReader = new StringReader (enemyFile.text);
+
+		while (reader.Peek () > -1) {
+
+			string enemyString = reader.ReadLine ();
+			string[] enemyData = enemyString.Split (',');
+
+			Vector3 enemyPosition;
+
+			enemyPosition.x = float.Parse (enemyData [0]);
+			enemyPosition.y = float.Parse (enemyData [1]);
+			enemyPosition.z = 0;
+
+			GameObject enemy;
+
+			if (int.Parse (enemyData [2]) == 1) {
+				enemy = (GameObject)Resources.Load ("Prefab/Enemy2");
+			} else {
+				enemy = (GameObject)Resources.Load ("Prefab/Enemy1");
+			}
+
+			enemy.transform.position = enemyPosition;
+			m_Enemy.Add(GameObject.Instantiate (enemy));
+		}
+
+		reader.Close ();
+
+		TextAsset stageInformation = (TextAsset)Resources.Load ("CSV/StageInformation");
+
+		StringReader stageReader = new StringReader (stageInformation.text);
 
 		List<Vector3> vertex = new List<Vector3>();
 		List<Vector2> uv = new List<Vector2> ();
 		List<int> triangle = new List<int> ();
 
-		for( int i = 0 ; i < vertexMax ; ++i ){
-			string vertexLine = reader.ReadLine ();
-			string[] vertexString = vertexLine.Split (',');
+		int count = 0;
+
+		while( stageReader.Peek() > -1 ){
+			string vertexLine = stageReader.ReadLine ();
+			string[] vertexString = vertexLine.Split (',' );
 			Vector3 vec = new Vector3 (float.Parse (vertexString [0]), float.Parse (vertexString [1]), 0.0f);
 			vertex.Add (vec);
 			uv.Add (new Vector2 (0.0f, 0.0f));
@@ -80,15 +119,17 @@ public class cStageModel : ScriptableObject{
 			vertex.Add (vec);
 			uv.Add (new Vector2 (0.0f, 0.0f));
 
-			if ((i * 2) >= 2) {
-				triangle.Add (i * 2);
-				triangle.Add ((i * 2) - 1);
-				triangle.Add ((i * 2) - 2);
+			if ((count * 2) >= 2) {
+				triangle.Add (count * 2);
+				triangle.Add ((count * 2) - 1);
+				triangle.Add ((count * 2) - 2);
 
-				triangle.Add ((i * 2) + 1);
-				triangle.Add ((i * 2) - 1);
-				triangle.Add (i * 2);
+				triangle.Add ((count * 2) + 1);
+				triangle.Add ((count * 2) - 1);
+				triangle.Add (count * 2);
 			}
+
+			++count;
 		}
 
 		Mesh mesh = new Mesh ();
@@ -108,10 +149,7 @@ public class cStageModel : ScriptableObject{
 
 		m_Stage = GameObject.Instantiate (m_Stage);
 
-		reader.Close ();
-
-		m_Enemy = (GameObject)Resources.Load ("Prefab/EnemyManager" + m_StageNumber.ToString ());
-		m_Enemy = GameObject.Instantiate (m_Enemy);
+		stageReader.Close ();
 	}
 
 	public void TimeCalc(){
@@ -155,8 +193,33 @@ public class cStageModel : ScriptableObject{
 		return m_StageMax;
 	}
 
+	public bool CheckGoal( Vector3 position ){
+		int index = 0;
+
+		while (position.x > m_StagePosition [index].x) {
+			++index;
+			if (index >= m_StagePosition.Count) {
+				break;
+			}
+		}
+
+		if (index <= 0 || index >= m_StagePosition.Count) {
+			return false;
+		}
+
+		if ((int)m_StagePosition [index].y == (int)m_StagePosition [index - 1].y) {
+			return true;
+		}
+
+		return false;
+	}
+
 	public void Destroy(){
 		Destroy (m_Stage);
-		Destroy (m_Enemy);
+		for (int i = 0; i < m_Enemy.Count; ++i) {
+			Destroy (m_Enemy [i]);
+		}
+
+		m_Enemy.Clear ();
 	}
 }

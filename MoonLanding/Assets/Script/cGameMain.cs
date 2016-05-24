@@ -107,15 +107,17 @@ public class cGameMain : cMain{
 		m_sModel.TimeCalc ();
 
 		if (m_pModel.GetMoveFlag () == false) {
-			if (m_pModel.GetClearFlag () == true) {
+			bool clearFlag = m_sModel.CheckGoal (m_pModel.GetPosition ());
+			if (clearFlag == true && m_pModel.GetClearFlag ()) {
 				m_State = eGameState.GameState_GameClear;
 			} else {
+				m_pModel.SetBombFlag ();
 				m_State = eGameState.GameState_GameOver;
 			}
 		}
 	}
 
-	private void GameClear(){
+	private void GameOver(){
 
 		m_gtModel.GameOver ();
 
@@ -127,7 +129,7 @@ public class cGameMain : cMain{
 		}
 	}
 
-	private void GameOver(){
+	private void GameClear(){
 
 		m_gtModel.GameClear ();
 

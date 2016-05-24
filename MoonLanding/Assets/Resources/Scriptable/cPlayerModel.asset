@@ -11,3 +11,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25f495c065ec5c24c96a40fde229c4c8, type: 3}
   m_Name: cPlayerModel
   m_EditorClassIdentifier: 
+  m_Gravity: 1.622
+  m_GoalAngle: 5
+  m_GoalSpeed: 3
+  m_AddAngle: 90
+  m_AddSpeed: 5
+  m_FuelMax: 15

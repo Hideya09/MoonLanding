@@ -24,6 +24,8 @@ public class cPlayerControl : MonoBehaviour{
 	public void PropulsionKey(){
 		if (Input.GetKey (KeyCode.DownArrow)) {
 			m_Model.CalcDirection ();
+		} else {
+			m_Model.EngineStop ();
 		}
 	}
 
