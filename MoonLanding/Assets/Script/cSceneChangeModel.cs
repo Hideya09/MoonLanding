@@ -8,6 +8,7 @@ public class cSceneChangeModel : ScriptableObject {
 	private float m_Arpha;
 	private bool m_PushFlag;
 
+	//文字を隠す
 	public void Init(){
 		m_Arpha = 0.0f;
 		m_PushFlag = false;
@@ -15,6 +16,7 @@ public class cSceneChangeModel : ScriptableObject {
 		m_AddFlag = true;
 	}
 
+	//文字をフェードインアウトさせる
 	public void FadeFont(){
 		if (m_AddFlag == true) {
 			m_Arpha += Time.deltaTime;
@@ -33,10 +35,12 @@ public class cSceneChangeModel : ScriptableObject {
 		return m_Arpha;
 	}
 
+	//入力があったら入れる
 	public void SetPush(){
 		m_PushFlag = true;
 	}
 
+	//入力があったことを取得
 	public bool GetPush(){
 		return m_PushFlag;
 	}

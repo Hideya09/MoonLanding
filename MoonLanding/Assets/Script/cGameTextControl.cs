@@ -5,11 +5,12 @@ public class cGameTextControl : MonoBehaviour{
 
 	public cGameTextModel m_gtModel;
 
-	void Update(){
+	void FixedUpdate(){
 		NextInput ();
 	}
 
 	public void NextInput(){
+		//キーが押されたことを知らせる
 		if (Input.GetKeyDown (KeyCode.Return)) {
 			m_gtModel.NextInput ();
 		}

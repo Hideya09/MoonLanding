@@ -2,7 +2,8 @@
 using System.Collections;
 
 public class cResultMain : cMain {
-	
+
+	//リザルトシーンのステート
 	public enum eResultState{
 		ResultState_FadeIn,
 		ResultState_Main,
@@ -17,6 +18,7 @@ public class cResultMain : cMain {
 
 	private cGameSceneManager.eGameScene m_RetScene;
 
+	//初期処理
 	public void OnEnable(){
 		m_State = eResultState.ResultState_FadeIn;
 
@@ -25,6 +27,7 @@ public class cResultMain : cMain {
 		m_scModel.Init ();
 	}
 
+	//リザルトシーン時のステート管理
 	public override cGameSceneManager.eGameScene State(){
 
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
@@ -47,6 +50,7 @@ public class cResultMain : cMain {
 		return m_RetScene;
 	}
 
+	//フェードイン
 	private void FadeIn(){
 		m_fadeModel.FadeExec ();
 
@@ -57,6 +61,7 @@ public class cResultMain : cMain {
 		}
 	}
 
+	//メインループ
 	private void Main(){
 		m_scModel.FadeFont ();
 
@@ -65,6 +70,7 @@ public class cResultMain : cMain {
 		}
 	}
 
+	//フェードアウト
 	private void FadeOut(){
 		m_fadeModel.FadeExec ();
 
@@ -73,6 +79,7 @@ public class cResultMain : cMain {
 		}
 	}
 
+	//終了処理
 	private void End(){
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
 

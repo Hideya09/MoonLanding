@@ -12,6 +12,7 @@ public class cCameraView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//カメラの位置をプレイヤーの位置に更新する
 		Vector3 position = m_pModel.GetPosition();
 		position.z = -52;
 

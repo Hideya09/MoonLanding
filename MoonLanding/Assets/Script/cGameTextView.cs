@@ -18,11 +18,13 @@ public class cGameTextView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//文字情報を取得し表示する
 		sTextInformation info = m_gtModel.GetInfo ();
 		m_Transform.localScale = new Vector3 (info.m_Size, info.m_Size, 1.0f);
 		m_Text.color = new Color (1.0f, 1.0f, 1.0f, info.m_Arpha);
 		m_Text.text = info.m_Text;
 
+		//ステートによってはエフェクトを出す
 		if (info.m_State == 2) {
 			m_Particle.Play ();
 		} else {

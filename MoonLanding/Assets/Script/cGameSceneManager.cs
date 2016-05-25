@@ -3,31 +3,34 @@ using System.Collections;
 
 public class cGameSceneManager : MonoBehaviour {
 
+	//ゲームシーン
 	public enum eGameScene{
-		GameScene_Title,
-		GameScene_Game,
-		GameScene_Result
+		GameScene_Title, //タイトルシーン
+		GameScene_Game, //ゲームシーン
+		GameScene_Result //リザルトシーン
 	}
 
 	private static GameObject m_SceneManager;
 
+	//現在のシーン
 	public eGameScene m_GameScene;
 
+	//シーン
 	public cMain[] m_Scene;
 
 	void Awake(){
+		//ゲームシーンマネージャーは一つだけしか作らない
 		if (m_SceneManager == null) {
 			DontDestroyOnLoad (gameObject);
 
 			m_SceneManager = gameObject;
 		} else {
-			Destroy (this);
+			Destroy (gameObject);
 			return;
 		}
 
 		//フレームレート設定
 		//Application.targetFrameRate = 60;
-		QualitySettings.vSyncCount = 60;
 	}
 
 	// Use this for initialization
@@ -36,6 +39,7 @@ public class cGameSceneManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//返り値が現在のシーン番号と違う場合はシーンを切り替える
 		eGameScene nextScene = m_Scene [(int)m_GameScene].State ();
 
 		if (nextScene != m_GameScene) {

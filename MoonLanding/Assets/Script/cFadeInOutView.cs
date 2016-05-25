@@ -13,6 +13,7 @@ public class cFadeInOutView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//α値を取得
 		Color color = new Color (1.0f, 1.0f, 1.0f, m_fadeModel.GetArpha ());
 
 		m_Sprite.color = color;

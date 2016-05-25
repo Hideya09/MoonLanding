@@ -5,12 +5,14 @@ public class cPlayerControl : MonoBehaviour{
 
 	public cPlayerModel m_Model;
 
-	void Update(){
+	//入力処理
+	void FixedUpdate(){
 		RotateKey ();
 		PropulsionKey ();
 		HorizontalKey ();
 	}
 
+	//回転入力
 	public void RotateKey(){
 		if (Input.GetKey (KeyCode.RightArrow)) {
 			m_Model.AddRightAngle ();
@@ -21,6 +23,7 @@ public class cPlayerControl : MonoBehaviour{
 		}
 	}
 
+	//推進処理
 	public void PropulsionKey(){
 		if (Input.GetKey (KeyCode.DownArrow)) {
 			m_Model.CalcDirection ();
@@ -29,6 +32,7 @@ public class cPlayerControl : MonoBehaviour{
 		}
 	}
 
+	//
 	public void HorizontalKey(){
 		if (Input.GetKey (KeyCode.UpArrow)) {
 			m_Model.HorizontalAngle();

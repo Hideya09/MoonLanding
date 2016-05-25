@@ -11,7 +11,8 @@ public class cSceneChangeControl : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
+		//入力処理
 		if( Input.GetKeyDown( KeyCode.Return ) ){
 			m_scModel.SetPush ();
 		}

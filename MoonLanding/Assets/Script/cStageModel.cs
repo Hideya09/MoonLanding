@@ -3,6 +3,7 @@ using System.Collections;
 using System.IO;
 using System.Collections.Generic;
 
+//経過時間格納構造体
 public struct sTime{
 	public int m_TimeSecond;
 	public int m_TimeMinute;
@@ -12,18 +13,27 @@ public struct sTime{
 
 public class cStageModel : ScriptableObject{
 
+	//現ステージ番号と最大値
 	private int m_StageNumber;
 	public int m_StageMax;
 
+	//時間情報
 	private sTime[] m_Time;
 
+	//ステージごとのスコアとトータル
+	private int[] m_Score;
+	private int m_TotalScore;
+
+	//プレイヤーの初期情報
 	private sPlayerInformation m_playerInformation;
 
+	//ステージのノード
 	private List< Vector2 > m_StagePosition;
 
 	GameObject m_Stage;
 	List< GameObject > m_Enemy;
 
+	//初期処理
 	public void OnEnable(){
 		m_StageNumber = 0;
 
@@ -32,17 +42,25 @@ public class cStageModel : ScriptableObject{
 		m_StagePosition = new List<Vector2> ();
 	}
 
+	//初期化処理
 	public void StageInit(){
 		m_StageNumber = 0;
 
 		m_Time = new sTime[m_StageMax];
+		m_Score = new int[m_StageMax];
+
+		m_TotalScore = 0;
 	}
 
+	//ステージのロード
 	public void StageLoad(){
+		//ステージ一の解放
 		m_StagePosition.Clear ();
 
+		//ステージ番号を一つ増やす
 		++m_StageNumber;
 
+		//プレイヤー情報の読み込み
 		m_playerInformation = new sPlayerInformation();
 
 		m_playerInformation.m_PlayerPosition.z = 0.0f;
@@ -71,6 +89,7 @@ public class cStageModel : ScriptableObject{
 
 		//StringReader enemyReader = new StringReader (enemyFile.text);
 
+		//敵情報の読み込みと生成
 		while (reader.Peek () > -1) {
 
 			string enemyString = reader.ReadLine ();
@@ -96,6 +115,7 @@ public class cStageModel : ScriptableObject{
 
 		reader.Close ();
 
+		//ステージ情報の読み込み
 		TextAsset stageInformation = (TextAsset)Resources.Load ("CSV/StageInformation");
 
 		StringReader stageReader = new StringReader (stageInformation.text);
@@ -107,6 +127,8 @@ public class cStageModel : ScriptableObject{
 		int count = 0;
 
 		while( stageReader.Peek() > -1 ){
+			//ステージの頂点を読み込み、メッシュを構成する
+
 			string vertexLine = stageReader.ReadLine ();
 			string[] vertexString = vertexLine.Split (',' );
 			Vector3 vec = new Vector3 (float.Parse (vertexString [0]), float.Parse (vertexString [1]), 0.0f);
@@ -115,7 +137,7 @@ public class cStageModel : ScriptableObject{
 
 			m_StagePosition.Add ( new Vector2( vec.x , vec.y ) );
 
-			vec.y = -10.0f;
+			vec.y = -100.0f;
 			vertex.Add (vec);
 			uv.Add (new Vector2 (0.0f, 0.0f));
 
@@ -132,6 +154,7 @@ public class cStageModel : ScriptableObject{
 			++count;
 		}
 
+		//メッシュ情報を入れ込む
 		Mesh mesh = new Mesh ();
 
 		mesh.vertices = vertex.ToArray ();
@@ -142,6 +165,7 @@ public class cStageModel : ScriptableObject{
 		uv.Clear ();
 		triangle.Clear ();
 
+		//ステージを生成し、メッシュを入れ込む
 		m_Stage = (GameObject)Resources.Load ("Prefab/Stage");
 
 		m_Stage.GetComponent< MeshFilter > ().mesh = mesh;
@@ -152,6 +176,7 @@ public class cStageModel : ScriptableObject{
 		stageReader.Close ();
 	}
 
+	//時間の計算
 	public void TimeCalc(){
 		m_Time[ m_StageNumber - 1 ].m_TimeMilliSecond += Time.deltaTime;
 		if (m_Time[ m_StageNumber - 1 ].m_TimeMilliSecond >= 1.0f) {
@@ -167,6 +192,7 @@ public class cStageModel : ScriptableObject{
 		}
 	}
 
+	//現ステージの時間を取得
 	public sTime NowStageTimeGet(){
 		if (m_StageNumber > m_StageMax || m_StageNumber <= 0) {
 			return new sTime();
@@ -174,6 +200,7 @@ public class cStageModel : ScriptableObject{
 		return m_Time [m_StageNumber - 1];
 	}
 
+	//指定番号のステージの時間を取得
 	public sTime StageTimeGet( int stageNumber ){
 		if (stageNumber >= m_StageMax || m_StageNumber < 0) {
 			return new sTime();
@@ -181,10 +208,26 @@ public class cStageModel : ScriptableObject{
 		return m_Time [stageNumber];
 	}
 
+	//現在のステージのスコアを取得
+	public int GetNowStageScore(){
+		return m_Score [m_StageNumber - 1];
+	}
+
+	//指定番号のステージのスコアを取得
+	public int GetStageSore( int stageNumber ){
+		return m_Score[ stageNumber ];
+	}
+
+	//トータルのスコアを取得
+	public int GetTotalScore(){
+		return m_TotalScore;
+	}
+
 	public sPlayerInformation GetInformation(){
 		return m_playerInformation;
 	}
 
+	//最終ステージかの確認
 	public bool StageNumberCheck(){
 		return m_StageMax == m_StageNumber;
 	}
@@ -193,7 +236,16 @@ public class cStageModel : ScriptableObject{
 		return m_StageMax;
 	}
 
+	//ゴール時にクリア位置かどうかを計算
 	public bool CheckGoal( Vector3 position ){
+		float distance =  Vector3.Distance (m_playerInformation.m_PlayerPosition, position);
+
+		//if (distance > 1000.0f) {
+		//	distance = 2000.0f - distance;
+		//}
+
+		m_Score [m_StageNumber - 1] = Mathf.RoundToInt (distance * 100);
+
 		int index = 0;
 
 		while (position.x > m_StagePosition [index].x) {
@@ -214,7 +266,10 @@ public class cStageModel : ScriptableObject{
 		return false;
 	}
 
+	//ステージとエネミー情報を破棄
 	public void Destroy(){
+		m_TotalScore += m_Score [m_StageNumber - 1];
+
 		Destroy (m_Stage);
 		for (int i = 0; i < m_Enemy.Count; ++i) {
 			Destroy (m_Enemy [i]);

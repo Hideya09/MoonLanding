@@ -14,6 +14,7 @@ public class cSceneChangeView : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		//文字のα値を設定
 		text.color = new Color (1.0f, 1.0f, 0.0f, m_scModel.GetArpha ());
 	}
 }

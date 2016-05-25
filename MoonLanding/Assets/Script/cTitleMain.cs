@@ -3,13 +3,14 @@ using System.Collections;
 
 public class cTitleMain : cMain {
 
+	//タイトルシーンのステート
 	public enum eTitleState{
 		TitleState_FadeIn,
 		TitleState_Main,
 		TitleState_FadeOut,
 		TitleState_End
 	}
-
+		
 	public cSceneChangeModel m_scModel;
 	public cFadeInOutModel m_fadeModel;
 
@@ -17,6 +18,7 @@ public class cTitleMain : cMain {
 
 	private cGameSceneManager.eGameScene m_RetScene;
 
+	//初期化処理
 	public void OnEnable(){
 		m_State = eTitleState.TitleState_FadeIn;
 
@@ -25,6 +27,7 @@ public class cTitleMain : cMain {
 		m_scModel.Init ();
 	}
 
+	//タイトルシーン時のステート管理
 	public override cGameSceneManager.eGameScene State(){
 
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
@@ -47,6 +50,7 @@ public class cTitleMain : cMain {
 		return m_RetScene;
 	}
 
+	//フェードイン
 	private void FadeIn(){
 		m_fadeModel.FadeExec ();
 
@@ -57,6 +61,7 @@ public class cTitleMain : cMain {
 		}
 	}
 
+	//メインループ
 	private void Main(){
 		m_scModel.FadeFont ();
 
@@ -65,6 +70,7 @@ public class cTitleMain : cMain {
 		}
 	}
 
+	//フェードアウト
 	private void FadeOut(){
 		m_fadeModel.FadeExec ();
 
@@ -73,6 +79,7 @@ public class cTitleMain : cMain {
 		}
 	}
 
+	//終了処理
 	private void End(){
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Game;
 
