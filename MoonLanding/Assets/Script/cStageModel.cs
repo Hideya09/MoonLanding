@@ -24,8 +24,16 @@ public class cStageModel : ScriptableObject{
 	private int[] m_Score;
 	private int m_TotalScore;
 
+	private int m_BestScore;
+
 	//プレイヤーの初期情報
 	private sPlayerInformation m_playerInformation;
+
+	//
+	private bool m_GoalPossible;
+
+	//ステージまでの距離
+	private float m_Distance;
 
 	//ステージのノード
 	private List< Vector2 > m_StagePosition;
@@ -40,12 +48,31 @@ public class cStageModel : ScriptableObject{
 		m_Enemy = new List< GameObject > ();
 
 		m_StagePosition = new List<Vector2> ();
+
+		m_BestScore = 0;
 	}
 
 	//初期化処理
-	public void StageInit(){
-		m_StageNumber = 0;
+	public void StageInit( int setStageNumber ){
+		if (setStageNumber <= m_StageMax && setStageNumber > 0) {
+			m_StageNumber = setStageNumber - 1;
+		} else {
+			m_StageNumber = 0;
 
+			TextAsset file = (TextAsset)Resources.Load ("CSV/BestScore");
+
+			StringReader reader = new StringReader (file.text);
+
+			string score = reader.ReadLine ();
+
+			int bestScore = int.Parse (score);
+
+			if (bestScore > m_BestScore) {
+				m_BestScore = bestScore;
+			}
+
+			reader.Close ();
+		}
 		m_Time = new sTime[m_StageMax];
 		m_Score = new int[m_StageMax];
 
@@ -54,7 +81,10 @@ public class cStageModel : ScriptableObject{
 
 	//ステージのロード
 	public void StageLoad(){
-		//ステージ一の解放
+
+		m_Distance = 0.0f;
+
+		//ステージの解放
 		m_StagePosition.Clear ();
 
 		//ステージ番号を一つ増やす
@@ -67,9 +97,9 @@ public class cStageModel : ScriptableObject{
 
 		string filePath = "CSV/StageFile" + m_StageNumber.ToString ();
 
-		TextAsset stageFile = (TextAsset)Resources.Load (filePath);
+		TextAsset file = (TextAsset)Resources.Load (filePath);
 
-		StringReader reader = new StringReader (stageFile.text);
+		StringReader reader = new StringReader (file.text);
 
 		string first = reader.ReadLine ();
 
@@ -116,9 +146,9 @@ public class cStageModel : ScriptableObject{
 		reader.Close ();
 
 		//ステージ情報の読み込み
-		TextAsset stageInformation = (TextAsset)Resources.Load ("CSV/StageInformation");
+		TextAsset stageFile = (TextAsset)Resources.Load ("CSV/StageInformation");
 
-		StringReader stageReader = new StringReader (stageInformation.text);
+		StringReader stageReader = new StringReader (stageFile.text);
 
 		List<Vector3> vertex = new List<Vector3>();
 		List<Vector2> uv = new List<Vector2> ();
@@ -192,6 +222,10 @@ public class cStageModel : ScriptableObject{
 		}
 	}
 
+	public int GetStageNumber(){
+		return m_StageNumber;
+	}
+
 	//現ステージの時間を取得
 	public sTime NowStageTimeGet(){
 		if (m_StageNumber > m_StageMax || m_StageNumber <= 0) {
@@ -223,6 +257,30 @@ public class cStageModel : ScriptableObject{
 		return m_TotalScore;
 	}
 
+	//ベストスコアを取得
+	public int GetBestScore(){
+		return m_BestScore;
+	}
+
+	public void SetBestScore( int setScore ){
+		if (m_BestScore < setScore) {
+			m_BestScore = setScore;
+		}
+	}
+
+	//ゴール可能な地面の上空かを取得
+	public bool GetGoalPossible(){
+		return m_GoalPossible;
+	}
+
+	public string GetDistance(){
+		if (m_Distance > 30.0f) {
+			return "地面との距離 " + m_Distance.ToString();
+		} else {
+			return "";
+		}
+	}
+
 	public sPlayerInformation GetInformation(){
 		return m_playerInformation;
 	}
@@ -238,14 +296,6 @@ public class cStageModel : ScriptableObject{
 
 	//ゴール時にクリア位置かどうかを計算
 	public bool CheckGoal( Vector3 position ){
-		float distance =  Vector3.Distance (m_playerInformation.m_PlayerPosition, position);
-
-		//if (distance > 1000.0f) {
-		//	distance = 2000.0f - distance;
-		//}
-
-		m_Score [m_StageNumber - 1] = Mathf.RoundToInt (distance * 100);
-
 		int index = 0;
 
 		while (position.x > m_StagePosition [index].x) {
@@ -260,16 +310,71 @@ public class cStageModel : ScriptableObject{
 		}
 
 		if ((int)m_StagePosition [index].y == (int)m_StagePosition [index - 1].y) {
+			m_TotalScore += m_Score [m_StageNumber - 1];
 			return true;
 		}
 
 		return false;
 	}
 
+	//地面との距離を計算
+	public void DistanceTera( Vector2 position ){
+		int index = 0;
+
+		while (position.x > m_StagePosition [index].x) {
+			++index;
+			if (index >= m_StagePosition.Count) {
+				break;
+			}
+		}
+
+		if ((int)m_StagePosition [index].y == (int)m_StagePosition [index - 1].y) {
+			m_GoalPossible = true;
+		} else {
+			m_GoalPossible = false;
+		}
+
+		m_Distance = 10000.0f;
+
+		for (int i = index - 3; i < index + 3; ++i) {
+			float bufDistance;
+
+			Vector2 tera = m_StagePosition [i] - m_StagePosition [i - 1];
+			Vector2 direction = position - m_StagePosition [i - 1];
+			if (((tera.x * tera.x) + (tera.y * tera.y)) < ((direction.x * direction.x) + (direction.y * direction.y))) {
+				Vector2 buf = direction - tera;
+
+				bufDistance = Mathf.Sqrt ((buf.x * buf.x) + (buf.y * buf.y));
+
+				if (bufDistance > Mathf.Sqrt ((direction.x * direction.x) + (direction.y * direction.y))) {
+					bufDistance = Mathf.Sqrt ((direction.x * direction.x) + (direction.y * direction.y));
+				}
+			} else {
+				float buf = (tera.x * direction.y) - (direction.x * tera.y);
+
+				buf = Mathf.Abs (buf);
+
+				bufDistance = buf / Mathf.Sqrt ((tera.x * tera.x) + (tera.y * tera.y));
+			}
+
+			if (bufDistance < m_Distance) {
+				m_Distance = bufDistance;
+			}
+		}
+	}
+
+	public void CalcScore( Vector3 position ){
+		float distance =  Vector3.Distance (m_playerInformation.m_PlayerPosition, position);
+
+		if (distance > 1000) {
+			distance = 2000 - distance;
+		}
+
+		m_Score [m_StageNumber - 1] = Mathf.RoundToInt ((distance) * 100);
+	}
+
 	//ステージとエネミー情報を破棄
 	public void Destroy(){
-		m_TotalScore += m_Score [m_StageNumber - 1];
-
 		Destroy (m_Stage);
 		for (int i = 0; i < m_Enemy.Count; ++i) {
 			Destroy (m_Enemy [i]);

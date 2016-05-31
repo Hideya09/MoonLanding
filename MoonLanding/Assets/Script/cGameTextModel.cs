@@ -12,7 +12,6 @@ public struct sTextInformation{
 }
 
 public class cGameTextModel : ScriptableObject{
-
 	private float m_Count;
 
 	private sTextInformation m_Info;
@@ -85,10 +84,11 @@ public class cGameTextModel : ScriptableObject{
 		m_GoalFlag = true;
 
 		m_Info.m_Arpha = 1.0f;
-		m_Info.m_Text = "Game Clear";
+		m_Info.m_Text = "Stage Clear";
 		m_Info.m_Size = 1.0f;
 
 		m_Info.m_State = 2;
+
 	}
 
 	//ゲームオーバーroクリア時にのみ入力時の処理を行う

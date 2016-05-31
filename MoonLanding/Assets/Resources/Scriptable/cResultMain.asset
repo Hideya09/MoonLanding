@@ -13,3 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_scModel: {fileID: 11400000, guid: d9cf3c6256604314387f774cfbfaf7b6, type: 2}
   m_fadeModel: {fileID: 11400000, guid: 33eb6f8df1bd4004fab16e21d89291d7, type: 2}
+  m_rsModel: {fileID: 11400000, guid: 775e392b582c60640a625eadbfe20f07, type: 2}

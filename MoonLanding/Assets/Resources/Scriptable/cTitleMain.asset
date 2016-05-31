@@ -11,5 +11,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85762bd5ed7ea1047bbef4851c0658a3, type: 3}
   m_Name: cTitleMain
   m_EditorClassIdentifier: 
-  m_scModel: {fileID: 11400000, guid: d9cf3c6256604314387f774cfbfaf7b6, type: 2}
   m_fadeModel: {fileID: 11400000, guid: 33eb6f8df1bd4004fab16e21d89291d7, type: 2}
+  m_selModel: {fileID: 11400000, guid: cebf6928c217b604a8603c306178a61e, type: 2}
+  m_gMain: {fileID: 11400000, guid: 431ac0c6f44d03746af6202bf6408327, type: 2}

@@ -42,6 +42,11 @@ public class cSceneChangeModel : ScriptableObject {
 
 	//入力があったことを取得
 	public bool GetPush(){
-		return m_PushFlag;
+		if (m_PushFlag == true) {
+			m_PushFlag = false;
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

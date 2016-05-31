@@ -6,8 +6,6 @@ public class cPlayerView : MonoBehaviour {
 
 	public cPlayerModel m_Model;
 
-	public Text m_uiSpeed;
-
 	public RectTransform m_uiGauge;
 
 	public ParticleSystem m_Particle;
@@ -36,11 +34,11 @@ public class cPlayerView : MonoBehaviour {
 			GetComponent< SpriteRenderer > ().enabled = false;
 
 			m_Bomb.Play ();
+		} else if ( m_Model.GetDrawFlag() == true) {
+			GetComponent< SpriteRenderer > ().enabled = true;
 		}
 
-		//現在の速度と残燃料の表示
-		m_uiSpeed.text = "Speed " + m_Model.GetSpeed ().ToString ( "f1" ) + "/ms";
-
+		//残燃料の表示
 		m_uiGauge.localScale = new Vector3 (m_Model.GetFuelPercent () , 1.0f , 1.0f);
 	}
 }

@@ -5,14 +5,17 @@ public class cResultMain : cMain {
 
 	//リザルトシーンのステート
 	public enum eResultState{
+		ResultState_Init,
 		ResultState_FadeIn,
 		ResultState_Main,
+		ResultState_Comparison,
 		ResultState_FadeOut,
 		ResultState_End
 	}
 
 	public cSceneChangeModel m_scModel;
 	public cFadeInOutModel m_fadeModel;
+	public cResultScoreModel m_rsModel;
 
 	private eResultState m_State;
 
@@ -20,7 +23,7 @@ public class cResultMain : cMain {
 
 	//初期処理
 	public void OnEnable(){
-		m_State = eResultState.ResultState_FadeIn;
+		m_State = eResultState.ResultState_Init;
 
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
 
@@ -33,11 +36,17 @@ public class cResultMain : cMain {
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
 
 		switch (m_State) {
+		case eResultState.ResultState_Init:
+			Init ();
+			break;
 		case eResultState.ResultState_FadeIn:
 			FadeIn ();
 			break;
 		case eResultState.ResultState_Main:
 			Main ();
+			break;
+		case eResultState.ResultState_Comparison:
+			Comparison ();
 			break;
 		case eResultState.ResultState_FadeOut:
 			FadeOut ();
@@ -48,6 +57,11 @@ public class cResultMain : cMain {
 		}
 
 		return m_RetScene;
+	}
+
+	private void Init(){
+		m_rsModel.Init ();
+		++m_State;
 	}
 
 	//フェードイン
@@ -70,6 +84,15 @@ public class cResultMain : cMain {
 		}
 	}
 
+	private void Comparison(){
+		m_rsModel.SetViewComparison ();
+		m_scModel.FadeFont ();
+
+		if (m_scModel.GetPush ()) {
+			++m_State;
+		}
+	}
+
 	//フェードアウト
 	private void FadeOut(){
 		m_fadeModel.FadeExec ();
@@ -85,6 +108,6 @@ public class cResultMain : cMain {
 
 		m_scModel.Init ();
 
-		m_State = eResultState.ResultState_FadeIn;
+		m_State = eResultState.ResultState_Init;
 	}
 }

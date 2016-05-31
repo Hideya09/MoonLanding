@@ -11,6 +11,11 @@ public class cGameTextView : MonoBehaviour {
 
 	public ParticleSystem m_Particle;
 
+	public Text m_NextText;
+	public Text m_TtitleText;
+
+	public GameObject m_Arrow;
+
 	// Use this for initialization
 	void Start () {
 	
@@ -27,7 +32,20 @@ public class cGameTextView : MonoBehaviour {
 		//ステートによってはエフェクトを出す
 		if (info.m_State == 2) {
 			m_Particle.Play ();
+
+			m_Arrow.SetActive (false);
+			m_NextText.enabled = false;
+			m_TtitleText.enabled = false;
 		} else {
+			if (info.m_State == 1) {
+				m_Arrow.SetActive (true);
+				m_NextText.enabled = true;
+				m_TtitleText.enabled = true;
+			} else {
+				m_Arrow.SetActive (false);
+				m_NextText.enabled = false;
+				m_TtitleText.enabled = false;
+			}
 			m_Particle.Stop ();
 		}
 	}

@@ -16,3 +16,6 @@ MonoBehaviour:
   m_gtModel: {fileID: 11400000, guid: 3e44171bf660d064e934416752f826ff, type: 2}
   m_fadeModel: {fileID: 11400000, guid: 33eb6f8df1bd4004fab16e21d89291d7, type: 2}
   m_eManagerModel: {fileID: 11400000, guid: e4e09f213c2bb184ab7747cc874650e2, type: 2}
+  m_scModel: {fileID: 11400000, guid: d9cf3c6256604314387f774cfbfaf7b6, type: 2}
+  m_selModel: {fileID: 11400000, guid: f01b39a159daeba46b038138882a9f2e, type: 2}
+  m_DeadFlag: 1

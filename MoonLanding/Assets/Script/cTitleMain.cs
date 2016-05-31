@@ -10,9 +10,11 @@ public class cTitleMain : cMain {
 		TitleState_FadeOut,
 		TitleState_End
 	}
-		
-	public cSceneChangeModel m_scModel;
+
 	public cFadeInOutModel m_fadeModel;
+	public cSelectModel m_selModel;
+
+	public cGameMain m_gMain;
 
 	private eTitleState m_State;
 
@@ -23,8 +25,6 @@ public class cTitleMain : cMain {
 		m_State = eTitleState.TitleState_FadeIn;
 
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
-
-		m_scModel.Init ();
 	}
 
 	//タイトルシーン時のステート管理
@@ -55,7 +55,7 @@ public class cTitleMain : cMain {
 		m_fadeModel.FadeExec ();
 
 		if (m_fadeModel.GetState () == cFadeInOutModel.eFadeState.FadeInStop) {
-			m_scModel.Init ();
+			m_selModel.Init ();
 
 			++m_State;
 		}
@@ -63,9 +63,9 @@ public class cTitleMain : cMain {
 
 	//メインループ
 	private void Main(){
-		m_scModel.FadeFont ();
+		if (m_selModel.GetSelectFlag ()) {
+			m_gMain.SetStage (m_selModel.GetSelectNumber ());
 
-		if (m_scModel.GetPush ()) {
 			++m_State;
 		}
 	}
@@ -83,7 +83,7 @@ public class cTitleMain : cMain {
 	private void End(){
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Game;
 
-		m_scModel.Init ();
+		m_selModel.Init ();
 
 		m_State = eTitleState.TitleState_FadeIn;
 	}

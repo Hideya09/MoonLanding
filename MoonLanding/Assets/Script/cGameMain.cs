@@ -30,6 +30,18 @@ public class cGameMain : cMain{
 
 	public cEnemyManagerModel m_eManagerModel;
 
+	public cSceneChangeModel m_scModel;
+
+	public cSelectModel m_selModel;
+
+	public bool m_DeadFlag;
+
+	private int m_SelectStage = 0;
+
+	public void SetStage( int setStage ){
+		m_SelectStage = setStage;
+	}
+
 	//生成時の処理
 	public void OnEnable(){
 		m_State = eGameState.GameState_Init;
@@ -76,7 +88,7 @@ public class cGameMain : cMain{
 
 	//初期化
 	private void Init(){
-		m_sModel.StageInit ();
+		m_sModel.StageInit ( m_SelectStage );
 	}
 
 	//フェードイン
@@ -94,6 +106,10 @@ public class cGameMain : cMain{
 		m_pModel.PlayerInfoSet( m_sModel.GetInformation());
 
 		m_gtModel.GameStartInit ();
+
+		m_scModel.Init ();
+
+		m_selModel.Init ();
 	}
 
 	//ゲーム開始
@@ -111,6 +127,10 @@ public class cGameMain : cMain{
 		//プレイヤー移動処理
 		m_pModel.MovePosition ();
 
+		m_sModel.DistanceTera (m_pModel.GetPosition ());
+
+		m_sModel.CalcScore (m_pModel.GetPosition ());
+
 		//エネミー移動処理
 		m_eManagerModel.MoveEnemy ();
 
@@ -120,11 +140,16 @@ public class cGameMain : cMain{
 		//ゴール判定
 		if (m_pModel.GetMoveFlag () == false) {
 			bool clearFlag = m_sModel.CheckGoal (m_pModel.GetPosition ());
+
 			if (clearFlag == true && m_pModel.GetClearFlag ()) {
 				m_State = eGameState.GameState_GameClear;
 			} else {
-				m_pModel.SetBombFlag ();
-				m_State = eGameState.GameState_GameOver;
+				if (m_DeadFlag == true) {
+					m_pModel.SetBombFlag ();
+					m_State = eGameState.GameState_GameOver;
+				} else {
+					m_pModel.SetMoveFlag ();
+				}
 			}
 		}
 	}
@@ -134,11 +159,19 @@ public class cGameMain : cMain{
 
 		m_gtModel.GameOver ();
 
+		//m_scModel.FadeFont ();
+
 		m_eManagerModel.MoveEnemy ();
 
-		if (m_gtModel.Next () == true) {
+		if (m_selModel.GetSelectFlag () == true) {
 			//返り値のタイトルをセット
-			m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
+			if (m_selModel.GetSelectNumber () == 0) {
+				m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
+
+				m_sModel.StageInit ( m_sModel.GetStageNumber() );
+			} else {
+				m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
+			}
 			m_State = eGameState.GameState_FadeOut;
 		}
 	}
@@ -148,11 +181,17 @@ public class cGameMain : cMain{
 
 		m_gtModel.GameClear ();
 
+		m_scModel.FadeFont ();
+
 		m_eManagerModel.MoveEnemy ();
 
 		if (m_gtModel.Next () == true) {
-			//返り値にリザルトをセット
-			m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
+			if (m_SelectStage > 0) {
+				m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
+			} else {
+				//返り値にリザルトをセット
+				m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
+			}
 			m_State = eGameState.GameState_FadeOut;
 		}
 	}

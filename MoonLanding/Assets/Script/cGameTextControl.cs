@@ -5,7 +5,7 @@ public class cGameTextControl : MonoBehaviour{
 
 	public cGameTextModel m_gtModel;
 
-	void FixedUpdate(){
+	void Update(){
 		NextInput ();
 	}
 

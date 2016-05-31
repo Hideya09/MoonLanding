@@ -23,6 +23,11 @@ public class cPlayerModel : ScriptableObject{
 
 	private bool m_BombFlag;
 
+	private bool m_DangerFlag;
+	private float m_DangerAlpha;
+
+	private bool m_DrawFlag;
+
 	//重力値
 	public float m_Gravity;
 
@@ -58,6 +63,13 @@ public class cPlayerModel : ScriptableObject{
 		m_Clearflag = false;
 
 		m_EngineFlag = false;
+
+		m_DrawFlag = true;
+
+		m_BombFlag = false;
+
+		m_DrawFlag = true;
+		m_DangerAlpha = 0.0f;
 	}
 
 	//左回転処理
@@ -103,6 +115,33 @@ public class cPlayerModel : ScriptableObject{
 		//落下しすぎ
 		if (m_Information.m_PlayerPosition.y < -100) {
 			m_MoveFlag = false;
+		}
+
+		//上昇しすぎ
+		if (m_Information.m_PlayerPosition.y > 450) {
+			m_MoveFlag = false;
+		}
+
+		//警告の表示
+		if (m_Information.m_PlayerPosition.y > 230) {
+			if (m_DangerFlag == false) {
+				m_DangerAlpha += Time.deltaTime;
+				if (m_DangerAlpha >= 1.0f) {
+					m_DangerAlpha = 1.0f;
+
+					m_DangerFlag = true;
+				}
+			} else {
+				m_DangerAlpha -= Time.deltaTime;
+				if (m_DangerAlpha <= 0.0f) {
+					m_DangerAlpha = 0.0f;
+
+					m_DangerFlag = false;
+				}
+			}
+		} else {
+			m_DangerFlag = false;
+			m_DangerAlpha = 0.0f;
 		}
 
 		//左右それぞれ限界に来たら場所を変える
@@ -162,6 +201,7 @@ public class cPlayerModel : ScriptableObject{
 
 	public void SetBombFlag(){
 		m_BombFlag = true;
+		m_DrawFlag = false;
 	}
 
 	//爆発エフェクト表示フラグを取得
@@ -173,6 +213,14 @@ public class cPlayerModel : ScriptableObject{
 		} else {
 			return false;
 		}
+	}
+
+	public bool GetDrawFlag(){
+		return m_DrawFlag;
+	}
+
+	public float GetDanger(){
+		return m_DangerAlpha;
 	}
 
 	//秒速を計算して返す
