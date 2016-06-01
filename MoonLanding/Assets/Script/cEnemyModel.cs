@@ -70,7 +70,12 @@ public class cEnemyModel {
 	public void HitMove(){
 		m_Position = m_BufPosition;
 
-		MoveChange ();
+		m_AngleMax = (m_Angle + 180) % 360;
+		m_AngleAdd = Mathf.DeltaAngle (m_Angle, m_AngleMax);
+
+		m_MoveTimeCountMax = m_MoveTimeCountMax - m_MoveTime + 1.0f;
+
+		m_MoveTime = 0.0f;
 	}
 
 	//位置を取得

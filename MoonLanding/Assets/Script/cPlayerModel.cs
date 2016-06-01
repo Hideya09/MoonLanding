@@ -68,7 +68,6 @@ public class cPlayerModel : ScriptableObject{
 
 		m_BombFlag = false;
 
-		m_DrawFlag = true;
 		m_DangerAlpha = 0.0f;
 	}
 
@@ -244,7 +243,7 @@ public class cPlayerModel : ScriptableObject{
 	}
 
 	public void HitCheck( Collider2D collider ){
-		if (GetSpeed () < m_GoalSpeed && Mathf.Abs (m_Information.m_Angle) < m_GoalAngle) {
+		if (GetSpeed () < m_GoalSpeed && Mathf.Abs (m_Information.m_Angle) < m_GoalAngle && collider.gameObject.CompareTag("Stage") ) {
 			m_Clearflag = true;
 		}
 

@@ -314,7 +314,6 @@ GameObject:
   - 224: {fileID: 643809652}
   - 222: {fileID: 643809654}
   - 114: {fileID: 643809653}
-  - 114: {fileID: 643809655}
   m_Layer: 5
   m_Name: Score1
   m_TagString: Untagged
@@ -378,20 +377,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 643809651}
---- !u!114 &643809655
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 643809651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2eaa062a277a6046a505976ce6ec091, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sModel: {fileID: 11400000, guid: f0a1b6f09a4d4204f9c9944845a75b4c, type: 2}
-  m_Text: {fileID: 643809653}
-  m_StageNumber: 0
 --- !u!1 &645937737
 GameObject:
   m_ObjectHideFlags: 0
@@ -629,6 +614,7 @@ GameObject:
   - 223: {fileID: 891869617}
   - 114: {fileID: 891869616}
   - 114: {fileID: 891869615}
+  - 114: {fileID: 891869619}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -725,6 +711,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &891869619
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 891869614}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2eaa062a277a6046a505976ce6ec091, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_sModel: {fileID: 11400000, guid: f0a1b6f09a4d4204f9c9944845a75b4c, type: 2}
+  m_Text:
+  - {fileID: 643809653}
+  - {fileID: 1524758482}
+  - {fileID: 1708997969}
 --- !u!1 &921714857
 GameObject:
   m_ObjectHideFlags: 0
@@ -2666,7 +2668,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1179890848}
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 13, y: 12, z: -20}
+  m_LocalPosition: {x: 13, y: 12, z: -15}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children: []
   m_Father: {fileID: 891869618}
@@ -6248,7 +6250,6 @@ GameObject:
   - 224: {fileID: 1524758480}
   - 222: {fileID: 1524758483}
   - 114: {fileID: 1524758482}
-  - 114: {fileID: 1524758481}
   m_Layer: 5
   m_Name: Score2
   m_TagString: Untagged
@@ -6273,20 +6274,6 @@ RectTransform:
   m_AnchoredPosition: {x: 298.64996, y: 122.599976}
   m_SizeDelta: {x: 196.7, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1524758481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1524758479}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2eaa062a277a6046a505976ce6ec091, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sModel: {fileID: 11400000, guid: f0a1b6f09a4d4204f9c9944845a75b4c, type: 2}
-  m_Text: {fileID: 1524758482}
-  m_StageNumber: 1
 --- !u!114 &1524758482
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6753,7 +6740,6 @@ GameObject:
   - 224: {fileID: 1708997967}
   - 222: {fileID: 1708997970}
   - 114: {fileID: 1708997969}
-  - 114: {fileID: 1708997968}
   m_Layer: 5
   m_Name: Score3
   m_TagString: Untagged
@@ -6778,20 +6764,6 @@ RectTransform:
   m_AnchoredPosition: {x: 298.64996, y: 81.600006}
   m_SizeDelta: {x: 196.7, y: 40}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1708997968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1708997966}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2eaa062a277a6046a505976ce6ec091, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_sModel: {fileID: 11400000, guid: f0a1b6f09a4d4204f9c9944845a75b4c, type: 2}
-  m_Text: {fileID: 1708997969}
-  m_StageNumber: 2
 --- !u!114 &1708997969
 MonoBehaviour:
   m_ObjectHideFlags: 0

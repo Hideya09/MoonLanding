@@ -20,11 +20,16 @@ public class cStageModel : ScriptableObject{
 	//時間情報
 	private sTime[] m_Time;
 
+	private bool m_ReStart;
+
 	//ステージごとのスコアとトータル
 	private int[] m_Score;
 	private int m_TotalScore;
 
 	private int m_BestScore;
+
+	public const int ScoreNone = -1;//計算されないスコア
+	public const int ScoreNoRecord = -2;//記録されず表示もされない
 
 	//プレイヤーの初期情報
 	private sPlayerInformation m_playerInformation;
@@ -54,10 +59,21 @@ public class cStageModel : ScriptableObject{
 
 	//初期化処理
 	public void StageInit( int setStageNumber ){
+		m_Score = new int[ m_StageMax ];
+
 		if (setStageNumber <= m_StageMax && setStageNumber > 0) {
 			m_StageNumber = setStageNumber - 1;
+
+			for (int i = 0; i < m_StageMax; ++i) {
+				if (i != m_StageNumber) {
+					m_Score [i] = -2;
+				}
+			}
 		} else {
 			m_StageNumber = 0;
+			if (PlayerPrefs.HasKey ("BestScore") == false) {
+				PlayerPrefs.SetInt ("BestScore", 0);
+			}
 
 			TextAsset file = (TextAsset)Resources.Load ("CSV/BestScore");
 
@@ -65,7 +81,7 @@ public class cStageModel : ScriptableObject{
 
 			string score = reader.ReadLine ();
 
-			int bestScore = int.Parse (score);
+			int bestScore = Mathf.Max (int.Parse (score), PlayerPrefs.GetInt ("BestScore"));
 
 			if (bestScore > m_BestScore) {
 				m_BestScore = bestScore;
@@ -74,13 +90,45 @@ public class cStageModel : ScriptableObject{
 			reader.Close ();
 		}
 		m_Time = new sTime[m_StageMax];
-		m_Score = new int[m_StageMax];
+
+		m_TotalScore = 0;
+
+		m_ReStart = false;
+	}
+
+	public void SetReStart(){
+		m_ReStart = true;
+	}
+
+	private void ReStart(){
+		--m_StageNumber;
+
+		for (int i = 0; i < m_StageNumber; ++i) {
+			m_Score [i] = Mathf.Min (m_Score [i], -1);
+
+			m_Time [i].m_TimeMilliSecond = 0.0f;
+			m_Time [i].m_TimeMinute = 0;
+			m_Time [i].m_TimeSecond = 0;
+		}
+
+		m_Score [m_StageNumber] = 0;
+		m_Time [m_StageNumber].m_TimeMilliSecond = 0.0f;
+		m_Time [m_StageNumber].m_TimeMinute = 0;
+		m_Time [m_StageNumber].m_TimeSecond = 0;
 
 		m_TotalScore = 0;
 	}
 
 	//ステージのロード
 	public void StageLoad(){
+
+		if (m_ReStart == true) {
+			ReStart ();
+
+			m_ReStart = false;
+		}
+
+		m_GoalPossible = false;
 
 		m_Distance = 0.0f;
 
@@ -287,7 +335,7 @@ public class cStageModel : ScriptableObject{
 
 	//最終ステージかの確認
 	public bool StageNumberCheck(){
-		return m_StageMax == m_StageNumber;
+		return ( m_StageMax == m_StageNumber ) && (!m_ReStart);
 	}
 
 	public int GetStageMax(){
@@ -310,7 +358,7 @@ public class cStageModel : ScriptableObject{
 		}
 
 		if ((int)m_StagePosition [index].y == (int)m_StagePosition [index - 1].y) {
-			m_TotalScore += m_Score [m_StageNumber - 1];
+			m_TotalScore += Mathf.Max (m_Score [m_StageNumber - 1], 0);
 			return true;
 		}
 

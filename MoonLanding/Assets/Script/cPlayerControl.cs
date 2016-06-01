@@ -25,7 +25,7 @@ public class cPlayerControl : MonoBehaviour{
 
 	//推進処理
 	public void PropulsionKey(){
-		if (Input.GetKey (KeyCode.DownArrow)) {
+		if (Input.GetKey (KeyCode.DownArrow) || Input.GetKey (KeyCode.Z)) {
 			m_Model.CalcDirection ();
 		} else {
 			m_Model.EngineStop ();
@@ -34,8 +34,8 @@ public class cPlayerControl : MonoBehaviour{
 
 	//
 	public void HorizontalKey(){
-		if (Input.GetKey (KeyCode.UpArrow)) {
-			m_Model.HorizontalAngle();
+		if (Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.X)) {
+			m_Model.HorizontalAngle ();
 		}
 	}
 

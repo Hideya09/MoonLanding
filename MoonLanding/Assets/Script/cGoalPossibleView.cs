@@ -15,7 +15,7 @@ public class cGoalPossibleView : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (m_sModel.GetGoalPossible () == true) {
-			m_Text.text = "ゴール可能地点上";
+			m_Text.text = "着陸地点発見！";
 		} else {
 			m_Text.text = "";
 		}

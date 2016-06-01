@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEditor;
 using System.Collections;
 using System.IO;
 
@@ -25,7 +24,12 @@ public class cResultScoreModel : ScriptableObject {
 		m_StageTime = new string[stageMax];
 
 		for (int i = 0; i < stageMax; ++i) {
-			m_StageScore [i] = m_sModel.GetStageSore (i).ToString("D6");
+			int stageScore = m_sModel.GetStageSore (i);
+			if (stageScore == -1) {
+				m_StageScore [i] = "----------";
+			} else {
+				m_StageScore [i] = stageScore.ToString ("D6");
+			}
 			sTime time = m_sModel.StageTimeGet(i);
 			m_StageTime [i] = time.m_TimeMinute.ToString ("D2") + ":" + time.m_TimeSecond.ToString ("D2");
 		}
@@ -46,6 +50,8 @@ public class cResultScoreModel : ScriptableObject {
 
 			write.Flush ();
 			write.Close ();
+
+			PlayerPrefs.SetInt ("BestScore", totalScore);
 
 		} else {
 			m_NewRecordFlag = false;

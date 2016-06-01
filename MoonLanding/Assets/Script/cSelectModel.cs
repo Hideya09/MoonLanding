@@ -7,21 +7,24 @@ public class cSelectModel : ScriptableObject {
 
 	private int m_Select;
 
-	private bool selectFlag;
+	private bool m_SelectFlag;
+
+	private bool m_ActiveFlag;
 
 	public void Init(){
-		selectFlag = false;
+		m_SelectFlag = false;
+		m_ActiveFlag = false;
 		m_Select = 0;
 	}
 
 	public void UpSelect(){
-		if (m_Select > 0) {
+		if (m_Select > 0 && m_SelectFlag == false && m_ActiveFlag == true) {
 			--m_Select;
 		}
 	}
 
 	public void DownSelect(){
-		if (m_Select < position.Length - 1) {
+		if (m_Select < position.Length - 1  && m_SelectFlag == false && m_ActiveFlag == true) {
 			++m_Select;
 		}
 	}
@@ -31,11 +34,14 @@ public class cSelectModel : ScriptableObject {
 	}
 
 	public bool GetSelectFlag(){
-		return selectFlag;
+		m_ActiveFlag = true;
+		return m_SelectFlag;
 	}
 
 	public void SetSelect(){
-		selectFlag = true;
+		if (m_ActiveFlag == true) {
+			m_SelectFlag = true;
+		}
 	}
 
 	public int GetSelectNumber(){

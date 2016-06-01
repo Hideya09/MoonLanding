@@ -168,7 +168,7 @@ public class cGameMain : cMain{
 			if (m_selModel.GetSelectNumber () == 0) {
 				m_RetScene = cGameSceneManager.eGameScene.GameScene_Result;
 
-				m_sModel.StageInit ( m_sModel.GetStageNumber() );
+				m_sModel.SetReStart ();
 			} else {
 				m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
 			}

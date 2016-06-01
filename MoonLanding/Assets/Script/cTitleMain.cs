@@ -5,6 +5,7 @@ public class cTitleMain : cMain {
 
 	//タイトルシーンのステート
 	public enum eTitleState{
+		TitleState_Init,
 		TitleState_FadeIn,
 		TitleState_Main,
 		TitleState_FadeOut,
@@ -22,7 +23,7 @@ public class cTitleMain : cMain {
 
 	//初期化処理
 	public void OnEnable(){
-		m_State = eTitleState.TitleState_FadeIn;
+		m_State = eTitleState.TitleState_Init;
 
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
 	}
@@ -33,6 +34,9 @@ public class cTitleMain : cMain {
 		m_RetScene = cGameSceneManager.eGameScene.GameScene_Title;
 
 		switch (m_State) {
+		case eTitleState.TitleState_Init:
+			Init ();
+			break;
 		case eTitleState.TitleState_FadeIn:
 			FadeIn ();
 			break;
@@ -50,13 +54,16 @@ public class cTitleMain : cMain {
 		return m_RetScene;
 	}
 
+	private void Init(){
+		m_selModel.Init ();
+		++m_State;
+	}
+
 	//フェードイン
 	private void FadeIn(){
 		m_fadeModel.FadeExec ();
 
 		if (m_fadeModel.GetState () == cFadeInOutModel.eFadeState.FadeInStop) {
-			m_selModel.Init ();
-
 			++m_State;
 		}
 	}
@@ -85,6 +92,6 @@ public class cTitleMain : cMain {
 
 		m_selModel.Init ();
 
-		m_State = eTitleState.TitleState_FadeIn;
+		m_State = eTitleState.TitleState_Init;
 	}
 }
