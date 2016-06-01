@@ -10,6 +10,7 @@ public class cPlayerControl : MonoBehaviour{
 		RotateKey ();
 		PropulsionKey ();
 		HorizontalKey ();
+		BombKey ();
 	}
 
 	//回転入力
@@ -36,6 +37,12 @@ public class cPlayerControl : MonoBehaviour{
 	public void HorizontalKey(){
 		if (Input.GetKey (KeyCode.UpArrow) || Input.GetKey (KeyCode.X)) {
 			m_Model.HorizontalAngle ();
+		}
+	}
+
+	public void BombKey(){
+		if (Input.GetKey (KeyCode.Space)) {
+			m_Model.Bomb ();
 		}
 	}
 

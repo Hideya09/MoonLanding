@@ -186,9 +186,8 @@ public class cStageModel : ScriptableObject{
 			} else {
 				enemy = (GameObject)Resources.Load ("Prefab/Enemy1");
 			}
-
-			enemy.transform.position = enemyPosition;
-			m_Enemy.Add(GameObject.Instantiate (enemy));
+		
+			m_Enemy.Add((GameObject)GameObject.Instantiate(enemy , enemyPosition , Quaternion.identity ));
 		}
 
 		reader.Close ();
@@ -345,6 +344,8 @@ public class cStageModel : ScriptableObject{
 	//ゴール時にクリア位置かどうかを計算
 	public bool CheckGoal( Vector3 position ){
 		int index = 0;
+
+		m_GoalPossible = false;
 
 		while (position.x > m_StagePosition [index].x) {
 			++index;

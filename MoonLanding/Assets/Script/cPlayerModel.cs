@@ -179,6 +179,10 @@ public class cPlayerModel : ScriptableObject{
 		m_EngineFlag = false;
 	}
 
+	public void Bomb(){
+		m_MoveFlag = false;
+	}
+
 	public bool GetMoveFlag(){
 		return m_MoveFlag;
 	}
@@ -199,6 +203,7 @@ public class cPlayerModel : ScriptableObject{
 	}
 
 	public void SetBombFlag(){
+		m_DangerAlpha = 0.0f;
 		m_BombFlag = true;
 		m_DrawFlag = false;
 	}
